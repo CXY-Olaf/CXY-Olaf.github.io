@@ -1,0 +1,67 @@
+---
+import type { Publication } from '../data/publications';
+import type { Translations } from '../i18n/en';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  pub: Publication;
+  t: Translations;
+}
+
+const { lang, pub, t } = Astro.props;
+const title = lang === 'zh' ? pub.title.zh : pub.title.en;
+const abstract = pub.abstract
+  ? lang === 'zh'
+    ? pub.abstract.zh
+    : pub.abstract.en
+  : '';
+---
+
+<div class="card">
+  <h3 class="text-base font-semibold text-slate-900 dark:text-slate-50">
+    {title}
+  </h3>
+
+  <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+    {pub.authors}
+  </p>
+
+  <p class="mt-0.5 text-sm">
+    <span
+      class="inline-block rounded-full bg-accent-50 px-2 py-0.5 text-xs font-medium text-accent-700 dark:bg-accent-950 dark:text-accent-300"
+    >
+      {pub.venue}
+    </span>
+    <span class="ml-2 text-xs text-slate-400">{pub.year}</span>
+  </p>
+
+  {abstract && (
+    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+      {abstract}
+    </p>
+  )}
+
+  <div class="mt-3 flex flex-wrap gap-1.5">
+    {pub.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+
+  <!-- Links -->
+  <div class="mt-3 flex flex-wrap gap-3 text-sm">
+    {pub.links.paper && (
+      <a href={pub.links.paper} class="text-link" target="_blank" rel="noopener">
+        📄 {t.publications.paper}
+      </a>
+    )}
+    {pub.links.code && (
+      <a href={pub.links.code} class="text-link" target="_blank" rel="noopener">
+        💻 {t.publications.code}
+      </a>
+    )}
+    {pub.links.project && (
+      <a href={pub.links.project} class="text-link" target="_blank" rel="noopener">
+        🌐 {t.publications.project}
+      </a>
+    )}
+  </div>
+</div>

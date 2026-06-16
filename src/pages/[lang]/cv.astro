@@ -1,0 +1,22 @@
+---
+import { getStaticPaths } from './_staticPaths';
+import { getTranslations, type Lang } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CVComponent from '../../components/CV.astro';
+
+export { getStaticPaths };
+
+const { lang } = Astro.params as { lang: Lang };
+const t = getTranslations(lang);
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.meta.cvTitle}
+  description={t.meta.cvDescription}
+>
+  <section class="section">
+    <h1 class="section-title">{t.cv.heading}</h1>
+    <CVComponent lang={lang} />
+  </section>
+</BaseLayout>

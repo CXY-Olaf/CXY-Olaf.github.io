@@ -1,0 +1,43 @@
+---
+import type { Post } from '../data/posts';
+import type { Translations } from '../i18n/en';
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  post: Post;
+  t: Translations;
+}
+
+const { lang, post, t } = Astro.props;
+const title = lang === 'zh' ? post.title.zh : post.title.en;
+const summary = lang === 'zh' ? post.summary.zh : post.summary.en;
+const base = `/${lang}`;
+const href = `${base}/notes/${post.slug}`;
+---
+
+<article class="card flex flex-col gap-3">
+  <div>
+    <a
+      href={href}
+      class="text-lg font-semibold text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-50 dark:hover:text-accent-400"
+    >
+      {title}
+    </a>
+    <p class="mt-0.5 text-xs text-slate-400">
+      {t.blog.published}: {post.date}
+    </p>
+  </div>
+
+  <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+    {summary}
+  </p>
+
+  <div class="flex flex-wrap gap-1.5">
+    {post.tags.map((tag) => <span class="tag">{tag}</span>)}
+  </div>
+
+  <a href={href} class="text-link text-sm">
+    {t.blog.readMore}
+  </a>
+</article>

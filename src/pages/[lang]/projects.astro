@@ -1,0 +1,96 @@
+---
+import { getStaticPaths } from './_staticPaths';
+import { getTranslations, type Lang } from '../../i18n';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import projects from '../../data/projects';
+
+export { getStaticPaths };
+
+const { lang } = Astro.params as { lang: Lang };
+const t = getTranslations(lang);
+
+const statusMap: Record<string, string> = {
+  'in-progress': t.projects.status.inProgress,
+  todo: t.projects.status.todo,
+  notes: t.projects.status.notes,
+};
+
+const statusColors: Record<string, string> = {
+  'in-progress':
+    'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+  todo: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',
+  notes: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.meta.projectsTitle}
+  description={t.meta.projectsDescription}
+>
+  <section class="section">
+    <h1 class="section-title">{t.projects.heading}</h1>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      {projects.map((project) => {
+        const title = lang === 'zh' ? project.title.zh : project.title.en;
+        const desc =
+          lang === 'zh' ? project.description.zh : project.description.en;
+
+        return (
+          <div class="card flex flex-col gap-3">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
+                {title}
+              </h3>
+              <span
+                class:list={[
+                  'shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium',
+                  statusColors[project.status] ?? statusColors.todo,
+                ]}
+              >
+                {statusMap[project.status] ?? project.status}
+              </span>
+            </div>
+            <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              {desc}
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+            <div class="mt-auto flex gap-3 pt-2 text-sm">
+              {project.github && project.github !== 'TODO' ? (
+                <a
+                  href={project.github}
+                  class="text-link"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  💻 {t.projects.github}
+                </a>
+              ) : (
+                <span class="text-sm text-slate-400 dark:text-slate-600">
+                  💻 {t.projects.github} (TODO)
+                </span>
+              )}
+              {project.demo && project.demo !== 'TODO' ? (
+                <a
+                  href={project.demo}
+                  class="text-link"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  🌐 {t.projects.demo}
+                </a>
+              ) : (
+                <span class="text-sm text-slate-400 dark:text-slate-600">
+                  🌐 {t.projects.demo} (TODO)
+                </span>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+</BaseLayout>

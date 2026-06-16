@@ -1,0 +1,36 @@
+---
+/**
+ * Root page — detects browser language and redirects.
+ * Falls back to /en/ if detection is unavailable.
+ *
+ * The inline script runs before any module loads so the redirect is instant.
+ * Static fallback: a meta refresh + manual links for non-JS environments.
+ */
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kailiang Cheng</title>
+    <noscript>
+      <meta http-equiv="refresh" content="0;url=/en/" />
+    </noscript>
+    <script is:inline>
+      // Detect browser language and redirect
+      var lang = (navigator.language || navigator.languages?.[0] || 'en').toLowerCase();
+      var target = lang.startsWith('zh') ? '/zh/' : '/en/';
+      window.location.replace(target);
+    </script>
+  </head>
+  <body style="display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:system-ui,sans-serif;background:#f8fafc;color:#334155">
+    <div style="text-align:center">
+      <p style="font-size:1.25rem;font-weight:600;margin-bottom:0.5rem">Kailiang Cheng</p>
+      <p>
+        <a href="/en/" style="color:#1a44f5">English</a>
+        &nbsp;·&nbsp;
+        <a href="/zh/" style="color:#1a44f5">中文</a>
+      </p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+---
+import { getTranslations, type Lang } from '../i18n';
+import publications from '../data/publications';
+import Section from './Section.astro';
+import PublicationItem from './PublicationItem.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<Section id="publications" title={t.publications.heading}>
+  {
+    publications.length === 0 ? (
+      <p
+        class="text-center text-slate-500 italic dark:text-slate-400"
+      >
+        {t.publications.empty}
+      </p>
+    ) : (
+      <div class="mx-auto max-w-3xl space-y-4">
+        {publications.map((pub) => (
+          <PublicationItem lang={lang} pub={pub} t={t} />
+        ))}
+      </div>
+    )
+  }
+</Section>

@@ -1,0 +1,44 @@
+---
+import { type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+// Build the other-language URL by swapping the prefix
+const currentPath = Astro.url.pathname;
+const otherLang: Lang = lang === 'en' ? 'zh' : 'en';
+const otherPath = currentPath.replace(/^\/(en|zh)(?=\/|$)/, `/${otherLang}`);
+const otherLabel = lang === 'en' ? '中文' : 'English';
+const currentLabel = lang === 'en' ? 'EN' : '中文';
+---
+
+<div class="relative" data-language-toggle>
+  <a
+    href={otherPath}
+    class="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+    aria-label={`Switch to ${otherLabel}`}
+    title={`Switch to ${otherLabel}`}
+  >
+    <span>{currentLabel}</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="hidden sm:block"
+      aria-hidden="true"
+    >
+      <path d="m5 12 7-7 7 7" />
+      <path d="M5 12h14" />
+      <path d="m12 5 7 7-7 7" />
+    </svg>
+  </a>
+</div>

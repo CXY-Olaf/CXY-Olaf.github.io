@@ -1,0 +1,76 @@
+---
+import { getTranslations, type Lang } from '../i18n';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  lang: Lang;
+  /** Page-specific title suffix (appended after site title). */
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  /** Use narrower content width (e.g. for blog posts). */
+  narrow?: boolean;
+}
+
+const { lang, title, description, ogImage, narrow = false } = Astro.props;
+const t = getTranslations(lang);
+const pageTitle = title ? `${title} — ${t.site.title}` : t.site.title;
+const pageDesc = description ?? t.site.description;
+const ogUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ogImg = ogImage ? new URL(ogImage, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang={lang === 'zh' ? 'zh-CN' : 'en'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={t.site.title} />
+    {ogImg && <meta property="og:image" content={ogImg} />}
+
+    <!-- Canonical -->
+    <link rel="canonical" href={ogUrl} />
+
+    <!-- Alternate language links -->
+    {
+      ['en', 'zh'].map((alt) => {
+        if (alt === lang) return null;
+        const altPath = Astro.url.pathname.replace(`/${lang}`, `/${alt}`);
+        const altHref = new URL(altPath, Astro.site).href;
+        return <link rel="alternate" hreflang={alt === 'zh' ? 'zh-CN' : 'en'} href={altHref} />;
+      })
+    }
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Inline theme script (blocks to avoid FOUC) -->
+    <script is:inline>
+      (function() {
+        var theme = localStorage.getItem('theme') || 'system';
+        var dark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+        else document.documentElement.classList.remove('dark');
+      })();
+    </script>
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <Navbar lang={lang} />
+
+    <main class:list={['flex-1', narrow ? 'max-w-3xl mx-auto w-full px-4 sm:px-6 py-8' : '']}>
+      <slot />
+    </main>
+
+    <Footer lang={lang} />
+  </body>
+</html>

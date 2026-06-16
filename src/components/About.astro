@@ -1,0 +1,19 @@
+---
+import { getTranslations, type Lang } from '../i18n';
+import Section from './Section.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<Section id="about" title={t.about.heading}>
+  <div class="mx-auto max-w-3xl space-y-4 text-center text-slate-600 leading-relaxed dark:text-slate-400">
+    <p>{t.about.paragraph1}</p>
+    <p>{t.about.paragraph2}</p>
+    <p>{t.about.paragraph3}</p>
+  </div>
+</Section>

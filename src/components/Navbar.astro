@@ -1,0 +1,122 @@
+---
+import { getTranslations, type Lang } from '../i18n';
+import LanguageToggle from './LanguageToggle.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = getTranslations(lang);
+const base = `/${lang}`;
+const isHomePage = Astro.url.pathname === base || Astro.url.pathname === `${base}/`;
+
+const navItems: { label: string; href: string }[] = [
+  { label: t.nav.home, href: base === '/en' ? '/en' : '/zh' },
+  { label: t.nav.about, href: `${base}/#about` },
+  { label: t.nav.research, href: `${base}/#research` },
+  { label: t.nav.publications, href: `${base}/publications` },
+  { label: t.nav.projects, href: `${base}/projects` },
+  { label: t.nav.notes, href: `${base}/notes` },
+  { label: t.nav.cv, href: `${base}/cv` },
+  { label: t.nav.contact, href: `${base}/#contact` },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-colors dark:border-slate-800/80 dark:bg-slate-950/80"
+>
+  <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6" aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
+    <!-- Logo / name -->
+    <a
+      href={base}
+      class="text-lg font-bold tracking-tight text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-100 dark:hover:text-accent-400"
+    >
+      KC
+    </a>
+
+    <!-- Desktop nav links -->
+    <ul class="hidden items-center gap-1 lg:flex">
+      {navItems.map((item) => {
+        const isActive = isHomePage
+          ? item.href === base || item.href.startsWith(`${base}#`)
+          : Astro.url.pathname === item.href || (item.href !== base && Astro.url.pathname.startsWith(item.href));
+        return (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                isActive
+                  ? 'text-accent-600 dark:text-accent-400'
+                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+
+    <!-- Right side: toggles + mobile menu button -->
+    <div class="flex items-center gap-2">
+      <LanguageToggle lang={lang} />
+      <ThemeToggle />
+
+      <!-- Mobile menu button -->
+      <button
+        id="mobile-menu-btn"
+        class="rounded-md p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 lg:hidden"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu (hidden by default) -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-slate-200 bg-white px-4 pb-4 pt-2 dark:border-slate-800 dark:bg-slate-950 lg:hidden"
+  >
+    <ul class="flex flex-col gap-1">
+      {navItems.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class="block rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', String(!open));
+    });
+
+    // Close mobile menu on link click
+    menu.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+</script>

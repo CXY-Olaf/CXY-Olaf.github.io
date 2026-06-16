@@ -1,0 +1,27 @@
+---
+export interface Props {
+  id?: string;
+  title?: string;
+  subtitle?: string;
+  /** Extra CSS classes for the section wrapper. */
+  class?: string;
+}
+
+const { id, title, subtitle, class: extraClass = '' } = Astro.props;
+---
+
+<section {id} class:list={['section', extraClass]}>
+  {
+    title && (
+      <div class="mb-12 text-center">
+        <h2 class="section-title">{title}</h2>
+        {subtitle && (
+          <p class="mx-auto mt-3 max-w-2xl text-slate-500 dark:text-slate-400">
+            {subtitle}
+          </p>
+        )}
+      </div>
+    )
+  }
+  <slot />
+</section>

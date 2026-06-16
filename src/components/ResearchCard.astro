@@ -1,0 +1,21 @@
+---
+export interface Props {
+  title: string;
+  description: string;
+  keywords: string[];
+}
+
+const { title, description, keywords } = Astro.props;
+---
+
+<div class="card flex flex-col gap-3">
+  <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
+    {title}
+  </h3>
+  <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+    {description}
+  </p>
+  <div class="mt-auto flex flex-wrap gap-1.5 pt-2">
+    {keywords.map((kw) => <span class="tag">{kw}</span>)}
+  </div>
+</div>

@@ -1,0 +1,45 @@
+---
+/**
+ * Home page — single-page layout with Hero, About, Research, Publications,
+ * and Contact sections. Links point to separate pages for Publications,
+ * Projects, Notes, and CV.
+ */
+export { getStaticPaths } from './_staticPaths';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import About from '../../components/About.astro';
+import Research from '../../components/Research.astro';
+import Publications from '../../components/Publications.astro';
+import Contact from '../../components/Contact.astro';
+import { getTranslations, type Lang } from '../../i18n';
+
+const { lang } = Astro.params as { lang: Lang };
+const t = getTranslations(lang);
+const metaTitle = lang === 'zh' ? '程开良 — 学术个人主页' : 'Kailiang Cheng — Academic Homepage';
+const base = `/${lang}`;
+---
+
+<BaseLayout
+  lang={lang}
+  title={metaTitle}
+  description={t.meta.homeDescription}
+>
+  <Hero lang={lang} />
+  <About lang={lang} />
+  <Research lang={lang} />
+
+  <!-- Inline publications preview -->
+  <section id="publications" class="section">
+    <div class="mb-12 text-center">
+      <h2 class="section-title">{t.publications.heading}</h2>
+    </div>
+    <Publications lang={lang} />
+    <div class="mt-6 text-center">
+      <a href={`${base}/publications`} class="btn-secondary">
+        {lang === 'zh' ? '查看全部论文 →' : 'View All Publications →'}
+      </a>
+    </div>
+  </section>
+
+  <Contact lang={lang} />
+</BaseLayout>
