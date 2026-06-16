@@ -13,7 +13,7 @@ const base = `/${lang}`;
 const isHomePage = Astro.url.pathname === base || Astro.url.pathname === `${base}/`;
 
 const navItems: { label: string; href: string }[] = [
-  { label: t.nav.home, href: base === '/en' ? '/en' : '/zh' },
+  { label: t.nav.home, href: base },
   { label: t.nav.about, href: `${base}/#about` },
   { label: t.nav.research, href: `${base}/#research` },
   { label: t.nav.publications, href: `${base}/publications` },
@@ -25,31 +25,36 @@ const navItems: { label: string; href: string }[] = [
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-md transition-colors dark:border-slate-800/80 dark:bg-slate-950/80"
+  id="navbar"
+  class="sticky top-0 z-50 border-b border-slate-200/60 bg-white/75 backdrop-blur-xl transition-all duration-300 supports-[backdrop-filter]:bg-white/60 dark:border-slate-800/60 dark:bg-slate-950/75 dark:supports-[backdrop-filter]:bg-slate-950/60"
 >
-  <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6" aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}>
-    <!-- Logo / name -->
+  <nav
+    class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 sm:px-8"
+    aria-label={lang === 'zh' ? '主导航' : 'Main navigation'}
+  >
+    <!-- Logo -->
     <a
       href={base}
-      class="text-lg font-bold tracking-tight text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-100 dark:hover:text-accent-400"
+      class="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-100 dark:hover:text-accent-400"
     >
-      KC
+      <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-accent-600 text-[10px] font-extrabold text-white">KC</span>
+      <span class="hidden sm:inline">Kailiang Cheng</span>
     </a>
 
-    <!-- Desktop nav links -->
-    <ul class="hidden items-center gap-1 lg:flex">
+    <!-- Desktop nav -->
+    <ul class="hidden items-center gap-0.5 lg:flex">
       {navItems.map((item) => {
         const isActive = isHomePage
-          ? item.href === base || item.href.startsWith(`${base}#`)
+          ? (item.href === base ? true : item.href.startsWith(`${base}#`))
           : Astro.url.pathname === item.href || (item.href !== base && Astro.url.pathname.startsWith(item.href));
         return (
           <li>
             <a
               href={item.href}
               class:list={[
-                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                'relative rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
                 isActive
-                  ? 'text-accent-600 dark:text-accent-400'
+                  ? 'text-accent-600 after:absolute after:inset-x-2 after:-bottom-[13px] after:h-[2px] after:rounded-full after:bg-accent-600 dark:text-accent-400 dark:after:bg-accent-400'
                   : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100',
               ]}
             >
@@ -60,38 +65,35 @@ const navItems: { label: string; href: string }[] = [
       })}
     </ul>
 
-    <!-- Right side: toggles + mobile menu button -->
-    <div class="flex items-center gap-2">
+    <!-- Right toggles + mobile button -->
+    <div class="flex items-center gap-1">
       <LanguageToggle lang={lang} />
       <ThemeToggle />
 
       <!-- Mobile menu button -->
       <button
         id="mobile-menu-btn"
-        class="rounded-md p-1.5 text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 lg:hidden"
-        aria-label="Toggle menu"
+        class="ml-1 rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 lg:hidden"
+        aria-label={lang === 'zh' ? '切换菜单' : 'Toggle menu'}
         aria-expanded="false"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" x2="20" y1="6" y2="6" />
-          <line x1="4" x2="20" y1="12" y2="12" />
-          <line x1="4" x2="20" y1="18" y2="18" />
-        </svg>
+        <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+        <svg id="menu-icon-close" class="hidden" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
   </nav>
 
-  <!-- Mobile menu (hidden by default) -->
+  <!-- Mobile menu -->
   <div
     id="mobile-menu"
-    class="hidden border-t border-slate-200 bg-white px-4 pb-4 pt-2 dark:border-slate-800 dark:bg-slate-950 lg:hidden"
+    class="animate-slide-down hidden border-t border-slate-200/60 bg-white/95 backdrop-blur-xl dark:border-slate-800/60 dark:bg-slate-950/95 lg:hidden"
   >
-    <ul class="flex flex-col gap-1">
+    <ul class="flex flex-col gap-0.5 px-5 pb-4 pt-2">
       {navItems.map((item) => (
         <li>
           <a
             href={item.href}
-            class="block rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
+            class="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
           >
             {item.label}
           </a>
@@ -102,19 +104,25 @@ const navItems: { label: string; href: string }[] = [
 </header>
 
 <script>
-  // Mobile menu toggle
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
-  if (btn && menu) {
+  const openIcon = document.getElementById('menu-icon-open');
+  const closeIcon = document.getElementById('menu-icon-close');
+
+  if (btn && menu && openIcon && closeIcon) {
     btn.addEventListener('click', () => {
-      const open = menu.classList.toggle('hidden');
-      btn.setAttribute('aria-expanded', String(!open));
+      const isOpen = !menu.classList.contains('hidden');
+      menu.classList.toggle('hidden', isOpen);
+      openIcon.classList.toggle('hidden', !isOpen);
+      closeIcon.classList.toggle('hidden', isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
     });
 
-    // Close mobile menu on link click
     menu.querySelectorAll('a').forEach((a) => {
       a.addEventListener('click', () => {
         menu.classList.add('hidden');
+        openIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
         btn.setAttribute('aria-expanded', 'false');
       });
     });

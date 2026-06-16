@@ -18,59 +18,35 @@ interface ContactItem {
 }
 
 const items: ContactItem[] = [
-  {
-    label: t.contact.email,
-    value: profile.email,
-    href: profile.email !== 'TODO' ? `mailto:${profile.email}` : '#',
-    icon: '✉️',
-  },
-  {
-    label: t.contact.github,
-    value: profile.github,
-    href: profile.github !== 'TODO' ? profile.github : '#',
-    icon: '🐙',
-  },
-  {
-    label: t.contact.scholar,
-    value: profile.googleScholar,
-    href: profile.googleScholar !== 'TODO' ? profile.googleScholar : '#',
-    icon: '📚',
-  },
-  {
-    label: t.contact.orcid,
-    value: profile.orcid,
-    href: profile.orcid !== 'TODO' ? profile.orcid : '#',
-    icon: '🆔',
-  },
-  {
-    label: t.contact.linkedin,
-    value: profile.linkedin,
-    href: profile.linkedin !== 'TODO' ? profile.linkedin : '#',
-    icon: '💼',
-  },
-  {
-    label: t.contact.location,
-    value: lang === 'zh' ? profile.location.zh : profile.location.en,
-    href: '#',
-    icon: '📍',
-  },
+  { label: t.contact.email, value: profile.email, href: profile.email !== 'TODO' ? `mailto:${profile.email}` : '#', icon: '✉️' },
+  { label: t.contact.github, value: profile.github, href: profile.github !== 'TODO' ? profile.github : '#', icon: '🐙' },
+  { label: t.contact.scholar, value: profile.googleScholar, href: profile.googleScholar !== 'TODO' ? profile.googleScholar : '#', icon: '📚' },
+  { label: t.contact.orcid, value: profile.orcid, href: profile.orcid !== 'TODO' ? profile.orcid : '#', icon: '🆔' },
+  { label: t.contact.linkedin, value: profile.linkedin, href: profile.linkedin !== 'TODO' ? profile.linkedin : '#', icon: '💼' },
+  { label: t.contact.location, value: lang === 'zh' ? profile.location.zh : profile.location.en, href: '#', icon: '📍' },
 ];
 ---
 
-<Section id="contact" title={t.contact.heading}>
-  <div class="mx-auto max-w-lg">
-    <div
-      class="grid gap-3 sm:grid-cols-2"
-    >
+<Section
+  id="contact"
+  alt
+  title={t.contact.heading}
+  subtitle={lang === 'zh'
+    ? '欢迎通过以下方式与我联系'
+    : 'Feel free to reach out through any of the channels below'
+  }
+>
+  <div class="mx-auto max-w-xl">
+    <div class="grid gap-3 sm:grid-cols-2">
       {items.map((item) => {
         const isPlaceholder = item.value === 'TODO';
         return (
           <a
             href={item.href}
             class:list={[
-              'card flex items-center gap-3 transition-colors',
+              'card flex items-center gap-3 transition-all hover:-translate-y-0.5',
               isPlaceholder
-                ? 'cursor-default opacity-60'
+                ? 'cursor-default opacity-50 hover:translate-y-0'
                 : 'hover:border-accent-300 dark:hover:border-accent-700',
             ]}
             target={item.href.startsWith('http') ? '_blank' : undefined}
@@ -78,13 +54,11 @@ const items: ContactItem[] = [
           >
             <span class="text-xl" aria-hidden="true">{item.icon}</span>
             <div class="min-w-0">
-              <p class="text-xs text-slate-500 dark:text-slate-400">
+              <p class="text-[11px] font-medium text-slate-400 uppercase tracking-wide">
                 {item.label}
               </p>
-              <p
-                class="truncate text-sm font-medium text-slate-900 dark:text-slate-200"
-              >
-                {isPlaceholder ? 'TODO' : item.value}
+              <p class="truncate text-sm font-medium text-slate-800 dark:text-slate-200">
+                {isPlaceholder ? `— ${t.contact.placeholder}` : item.value}
               </p>
             </div>
           </a>

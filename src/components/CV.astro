@@ -1,9 +1,4 @@
 ---
-/**
- * CV component — used on the CV page.
- * Renders structured education, research interests, and placeholder sections
- * for publications, projects, skills, experience, awards, and contact.
- */
 import { getTranslations, type Lang } from '../i18n';
 
 interface Props {
@@ -15,113 +10,76 @@ const t = getTranslations(lang);
 const base = `/${lang}`;
 ---
 
-<div class="space-y-10">
-  <!-- Download -->
+<div class="mx-auto max-w-3xl space-y-14">
+  <!-- Download CV -->
   <div class="text-center">
     <a href="/cv.pdf" class="btn-primary" download>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-        <polyline points="7 10 12 15 17 10" />
-        <line x1="12" y1="15" x2="12" y2="3" />
-      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       {t.cv.download}
     </a>
-    <p class="mt-2 text-xs text-slate-400">
-      {t.cv.downloadTip}
-    </p>
+    <p class="mt-2 text-xs text-slate-400">{t.cv.downloadTip}</p>
   </div>
 
   <!-- Education -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      📚 {t.cv.education}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">📚</span> {t.cv.education}
     </h3>
-    <div class="space-y-4">
+    <div class="space-y-3">
       {t.cv.educationItems.map((item) => (
         <div class="card">
-          <h4 class="font-semibold text-slate-900 dark:text-slate-50">
-            {item.degree}
-          </h4>
-          <p class="text-sm text-slate-600 dark:text-slate-400">
-            {item.school}
-          </p>
+          <h4 class="font-semibold text-slate-900 dark:text-slate-50">{item.degree}</h4>
+          <p class="text-sm text-slate-600 dark:text-slate-400">{item.school}</p>
           <p class="text-xs text-slate-400">{item.period}</p>
-          {item.notes && (
-            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              {item.notes}
-            </p>
-          )}
+          {item.notes && <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">{item.notes}</p>}
         </div>
       ))}
     </div>
   </section>
 
-  <!-- Research Interests -->
+  <!-- Research interests -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      🔬 {t.cv.researchInterests}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">🔬</span> {t.cv.researchInterests}
     </h3>
     <div class="card">
       <div class="flex flex-wrap gap-2">
-        {t.research.directions.map((d) => (
-          <span class="tag">{d.title}</span>
-        ))}
+        {t.research.directions.map((d) => <span class="tag-accent">{d.title}</span>)}
       </div>
     </div>
   </section>
 
   <!-- Publications -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      📄 {t.cv.publications}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">📄</span> {t.cv.publications}
     </h3>
-    <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {t.publications.empty}
-      </p>
-      <a href={`${base}/publications`} class="text-link mt-2 inline-block text-sm">
-        {t.nav.publications} →
-      </a>
+    <div class="empty-state">
+      <span class="empty-state-icon">📝</span>
+      <p class="empty-state-text">{t.publications.empty}</p>
+      <a href={`${base}/publications`} class="text-link mt-3 text-sm">{t.nav.publications} →</a>
     </div>
   </section>
 
   <!-- Projects -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      🛠️ {t.cv.projects}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">🛠️</span> {t.cv.projects}
     </h3>
-    <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {t.cv.todo}
-      </p>
-      <a href={`${base}/projects`} class="text-link mt-2 inline-block text-sm">
-        {t.nav.projects} →
-      </a>
+    <div class="empty-state">
+      <span class="empty-state-icon">🔧</span>
+      <p class="empty-state-text">TODO</p>
+      <a href={`${base}/projects`} class="text-link mt-3 text-sm">{t.nav.projects} →</a>
     </div>
   </section>
 
   <!-- Skills -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      ⚙️ {t.cv.skills}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">⚙️</span> {t.cv.skills}
     </h3>
     <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {t.cv.todo}
-      </p>
-      <p class="mt-2 text-xs text-slate-400 dark:text-slate-500">
-        <!-- TODO: Add your skills, e.g. Python, PyTorch, CUDA, etc. -->
+      <p class="text-xs text-slate-400 dark:text-slate-500">
         TODO: Python, PyTorch, Diffusers, CUDA, Linux, Git, LaTeX …
       </p>
     </div>
@@ -129,44 +87,34 @@ const base = `/${lang}`;
 
   <!-- Experience -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      💼 {t.cv.experience}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">💼</span> {t.cv.experience}
     </h3>
-    <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {t.cv.todo}
-      </p>
-      <p class="mt-2 text-xs text-slate-400 dark:text-slate-500">
-        <!-- TODO: Add internships, TA experience, etc. -->
-        TODO: Internships, teaching assistantships, etc.
-      </p>
+    <div class="empty-state">
+      <span class="empty-state-icon">🏢</span>
+      <p class="empty-state-text">{t.cv.todo}</p>
     </div>
   </section>
 
   <!-- Awards -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      🏆 {t.cv.awards}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">🏆</span> {t.cv.awards}
     </h3>
-    <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        {t.cv.todo}
-      </p>
+    <div class="empty-state">
+      <span class="empty-state-icon">🥇</span>
+      <p class="empty-state-text">{t.cv.todo}</p>
     </div>
   </section>
 
   <!-- Contact -->
   <section>
-    <h3 class="mb-4 text-xl font-bold text-slate-900 dark:text-slate-50">
-      📬 {t.cv.contact}
+    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
+      <span aria-hidden="true">📬</span> {t.cv.contact}
     </h3>
     <div class="card">
-      <p class="text-sm text-slate-500 dark:text-slate-400">
-        Email: TODO
-      </p>
-      <a href={`${base}/#contact`} class="text-link mt-2 inline-block text-sm">
-        {t.nav.contact} →
-      </a>
+      <p class="text-sm text-slate-500 dark:text-slate-400">Email: TODO</p>
+      <a href={`${base}/#contact`} class="text-link mt-2 inline-block text-sm">{t.nav.contact} →</a>
     </div>
   </section>
 </div>

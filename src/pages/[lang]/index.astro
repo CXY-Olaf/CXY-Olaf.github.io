@@ -1,45 +1,86 @@
 ---
-/**
- * Home page — single-page layout with Hero, About, Research, Publications,
- * and Contact sections. Links point to separate pages for Publications,
- * Projects, Notes, and CV.
- */
 export { getStaticPaths } from './_staticPaths';
+import { getTranslations, type Lang } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import About from '../../components/About.astro';
 import Research from '../../components/Research.astro';
 import Publications from '../../components/Publications.astro';
 import Contact from '../../components/Contact.astro';
-import { getTranslations, type Lang } from '../../i18n';
+import Section from '../../components/Section.astro';
 
 const { lang } = Astro.params as { lang: Lang };
 const t = getTranslations(lang);
-const metaTitle = lang === 'zh' ? '程开良 — 学术个人主页' : 'Kailiang Cheng — Academic Homepage';
 const base = `/${lang}`;
 ---
 
-<BaseLayout
-  lang={lang}
-  title={metaTitle}
-  description={t.meta.homeDescription}
->
+<BaseLayout lang={lang} title={t.meta.homeTitle} description={t.meta.homeDescription} heroBg>
+  <!-- First screen — who I am -->
   <Hero lang={lang} />
+
+  <!-- Divider -->
+  <div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
+    <hr class="divider" />
+  </div>
+
+  <!-- Second screen — about me -->
   <About lang={lang} />
+
+  <!-- Third screen — research directions -->
   <Research lang={lang} />
 
-  <!-- Inline publications preview -->
-  <section id="publications" class="section">
-    <div class="mb-12 text-center">
-      <h2 class="section-title">{t.publications.heading}</h2>
-    </div>
+  <!-- Fourth screen — publications preview -->
+  <Section
+    id="publications"
+    alt
+    title={t.publications.heading}
+    subtitle={lang === 'zh' ? '当前研究工作正在整理中，欢迎稍后查看' : 'Current research work is being organized — check back later'}
+  >
     <Publications lang={lang} />
-    <div class="mt-6 text-center">
+    <div class="mt-8 text-center">
       <a href={`${base}/publications`} class="btn-secondary">
         {lang === 'zh' ? '查看全部论文 →' : 'View All Publications →'}
       </a>
     </div>
-  </section>
+  </Section>
 
+  <!-- Fifth screen — notes preview -->
+  <Section
+    title={t.blog.heading}
+    subtitle={lang === 'zh' ? '技术笔记与学习记录' : 'Technical notes and learning logs'}
+  >
+    <div class="mx-auto max-w-3xl space-y-4">
+      {
+        (await import('../../data/posts')).default
+          .filter((p) => p.published)
+          .slice(0, 2)
+          .map((post) => {
+            const title = lang === 'zh' ? post.title.zh : post.title.en;
+            const summary = lang === 'zh' ? post.summary.zh : post.summary.en;
+            return (
+              <article class="card group flex flex-col gap-3 hover:-translate-y-1">
+                <div>
+                  <a href={`${base}/notes/${post.slug}`} class="text-lg font-semibold text-slate-900 transition-colors group-hover:text-accent-600 dark:text-slate-50 dark:group-hover:text-accent-400">
+                    {title}
+                  </a>
+                  <p class="mt-0.5 text-xs text-slate-400">{post.date}</p>
+                </div>
+                <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">{summary}</p>
+                <div class="flex flex-wrap gap-1.5">
+                  {post.tags.map((tag: string) => <span class="tag">{tag}</span>)}
+                </div>
+              </article>
+            );
+          })
+      }
+    </div>
+    <div class="mt-8 text-center">
+      <a href={`${base}/notes`} class="btn-ghost">
+        {lang === 'zh' ? '查看全部笔记 →' : 'View All Notes →'}
+      </a>
+    </div>
+  </Section>
+
+  <!-- Sixth screen — contact -->
   <Contact lang={lang} />
 </BaseLayout>

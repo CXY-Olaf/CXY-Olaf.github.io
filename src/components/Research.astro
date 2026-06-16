@@ -9,15 +9,65 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = getTranslations(lang);
+
+const iconMap = ['🧬', '🎨', '⚡', '📐'];
+
+const focusTree = lang === 'zh'
+  ? [
+      { en: 'Generative Models', zh: '生成模型', children: ['扩散模型', 'Flow Matching', '图像生成'] },
+      { en: 'Controllable Editing', zh: '可控生成', children: ['图像编辑', '语义一致性', '免训练方法'] },
+      { en: 'Efficient Systems', zh: '高效推理', children: ['模型加速', 'KV-Cache', '量化部署'] },
+      { en: 'Theory & Geometry', zh: '理论几何', children: ['最优传输', '几何深度学习', '路径优化'] },
+    ]
+  : [
+      { en: 'Generative Models', zh: '生成模型', children: ['Diffusion', 'Flow Matching', 'Image Gen'] },
+      { en: 'Controllable Editing', zh: '可控生成', children: ['Image Editing', 'Semantic Control', 'Training-free'] },
+      { en: 'Efficient Systems', zh: '高效推理', children: ['Inference', 'KV-Cache', 'Quantization'] },
+      { en: 'Theory & Geometry', zh: '理论几何', children: ['Optimal Transport', 'Geometric DL', 'Path Opt'] },
+    ];
 ---
 
-<Section id="research" title={t.research.heading}>
+<Section
+  id="research"
+  title={t.research.heading}
+  subtitle={lang === 'zh'
+    ? '我目前关注的几个研究方向'
+    : 'Research areas I am currently exploring'
+  }
+>
+  <!-- Research focus tree — visual component -->
+  <div class="mb-14 overflow-x-auto">
+    <div class="mx-auto flex min-w-fit max-w-3xl items-start justify-center gap-6 sm:gap-8">
+      {focusTree.map((branch) => (
+        <div class="flex flex-col items-center">
+          <!-- Root node -->
+          <span class="tag-accent text-xs font-semibold whitespace-nowrap">
+            {lang === 'zh' ? branch.zh : branch.en}
+          </span>
+          <!-- Vertical connector line -->
+          <div class="my-1 h-4 w-px bg-slate-300 dark:bg-slate-600"></div>
+          <!-- Children as small pills -->
+          <div class="flex flex-col items-center gap-1">
+            {branch.children.map((child) => (
+              <span class="tag whitespace-nowrap text-[10px]">
+                {child}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Research cards -->
   <div class="grid gap-6 sm:grid-cols-2">
-    {t.research.directions.map((dir) => (
+    {t.research.directions.map((dir, i) => (
       <ResearchCard
         title={dir.title}
         description={dir.description}
         keywords={dir.keywords}
+        icon={iconMap[i] ?? '🔬'}
+        index={i}
       />
     ))}
   </div>

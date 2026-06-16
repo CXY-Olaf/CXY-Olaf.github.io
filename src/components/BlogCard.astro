@@ -16,15 +16,15 @@ const base = `/${lang}`;
 const href = `${base}/notes/${post.slug}`;
 ---
 
-<article class="card flex flex-col gap-3">
+<article class="card group flex flex-col gap-3 hover:-translate-y-1">
   <div>
     <a
       href={href}
-      class="text-lg font-semibold text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-50 dark:hover:text-accent-400"
+      class="text-lg font-semibold text-slate-900 transition-colors group-hover:text-accent-600 dark:text-slate-50 dark:group-hover:text-accent-400"
     >
       {title}
     </a>
-    <p class="mt-0.5 text-xs text-slate-400">
+    <p class="mt-1 text-xs text-slate-400">
       {t.blog.published}: {post.date}
     </p>
   </div>
@@ -37,7 +37,7 @@ const href = `${base}/notes/${post.slug}`;
     {post.tags.map((tag) => <span class="tag">{tag}</span>)}
   </div>
 
-  <a href={href} class="text-link text-sm">
+  <a href={href} class="text-link mt-1 text-sm">
     {t.blog.readMore}
   </a>
 </article>

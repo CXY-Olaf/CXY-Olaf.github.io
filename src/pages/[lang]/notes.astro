@@ -1,68 +1,30 @@
 ---
-import { getStaticPaths } from './_staticPaths';
+export { getStaticPaths } from './_staticPaths';
 import { getTranslations, type Lang } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
 import posts from '../../data/posts';
-
-export { getStaticPaths };
 
 const { lang } = Astro.params as { lang: Lang };
 const t = getTranslations(lang);
-const base = `/${lang}`;
-
-// Only show published posts, sorted by date descending
-const visiblePosts = posts
-  .filter((p) => p.published)
-  .sort((a, b) => b.date.localeCompare(a.date));
+const visiblePosts = posts.filter((p) => p.published).sort((a, b) => b.date.localeCompare(a.date));
 ---
 
-<BaseLayout
-  lang={lang}
-  title={t.meta.notesTitle}
-  description={t.meta.notesDescription}
->
+<BaseLayout lang={lang} title={t.meta.notesTitle} description={t.meta.notesDescription}>
   <section class="section">
     <h1 class="section-title">{t.blog.heading}</h1>
 
     {
       visiblePosts.length === 0 ? (
-        <p class="text-center text-slate-500 italic dark:text-slate-400">
-          {t.blog.empty}
-        </p>
+        <div class="empty-state">
+          <span class="empty-state-icon">📖</span>
+          <p class="empty-state-text">{t.blog.empty}</p>
+        </div>
       ) : (
-        <div class="mx-auto max-w-3xl space-y-6">
-          {visiblePosts.map((post) => {
-            const title =
-              lang === 'zh' ? post.title.zh : post.title.en;
-            const summary =
-              lang === 'zh' ? post.summary.zh : post.summary.en;
-            const href = `${base}/notes/${post.slug}`;
-
-            return (
-              <article class="card flex flex-col gap-3">
-                <div>
-                  <a
-                    href={href}
-                    class="text-lg font-semibold text-slate-900 transition-colors hover:text-accent-600 dark:text-slate-50 dark:hover:text-accent-400"
-                  >
-                    {title}
-                  </a>
-                  <p class="mt-0.5 text-xs text-slate-400">
-                    {t.blog.published}: {post.date}
-                  </p>
-                </div>
-                <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  {summary}
-                </p>
-                <div class="flex flex-wrap gap-1.5">
-                  {post.tags.map((tag) => <span class="tag">{tag}</span>)}
-                </div>
-                <a href={href} class="text-link text-sm">
-                  {t.blog.readMore}
-                </a>
-              </article>
-            );
-          })}
+        <div class="mx-auto max-w-3xl space-y-5">
+          {visiblePosts.map((post) => (
+            <BlogCard lang={lang} post={post} t={t} />
+          ))}
         </div>
       )
     }

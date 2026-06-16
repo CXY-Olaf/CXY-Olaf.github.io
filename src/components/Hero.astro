@@ -1,6 +1,5 @@
 ---
 import { getTranslations, type Lang } from '../i18n';
-
 interface Props {
   lang: Lang;
 }
@@ -9,112 +8,124 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 const base = `/${lang}`;
 
-// Research direction tags
-const tags = [
+const tagline = lang === 'zh'
+  ? '探索可控、高效、可靠的生成式人工智能系统'
+  : 'Building controllable, efficient, and reliable generative AI systems';
+
+const researchTags = [
   'Diffusion Models',
-  'Image Editing',
   'Flow Matching',
-  'Optimal Transport',
+  'Image Editing',
+  'Controllable Generation',
   'Efficient Inference',
   'AI Infra',
 ];
+
+const statusCards = [
+  {
+    label: lang === 'zh' ? '🏫 硕士在读' : '🏫 Master\'s Student',
+    detail: lang === 'zh' ? '中国科学技术大学' : 'USTC',
+  },
+  {
+    label: lang === 'zh' ? '🎓 本科毕业' : '🎓 B.S.',
+    detail: lang === 'zh' ? '上海交通大学' : 'SJTU',
+  },
+  {
+    label: lang === 'zh' ? '🔬 研究方向' : '🔬 Research',
+    detail: lang === 'zh' ? '生成模型 · 图像编辑' : 'Gen Models · Editing',
+  },
+  {
+    label: lang === 'zh' ? '📍 所在地' : '📍 Location',
+    detail: lang === 'zh' ? '合肥' : 'Hefei, China',
+  },
+];
 ---
 
-<section
-  class="flex min-h-[calc(100vh-4rem)] items-center px-4 py-16 sm:px-6 lg:px-8"
->
-  <div class="mx-auto w-full max-w-4xl text-center">
-    <!-- Avatar / initials placeholder -->
-    <div class="mx-auto mb-8 flex h-28 w-28 items-center justify-center rounded-full bg-accent-100 text-4xl font-bold text-accent-600 ring-4 ring-accent-50 dark:bg-accent-950 dark:text-accent-400 dark:ring-accent-900">
-      {t.hero.initials}
-    </div>
+<section class="relative flex min-h-[calc(100vh-4rem)] items-center overflow-hidden px-5 py-16 sm:px-8 lg:px-10">
+  <!-- Background blob decoration -->
+  <div
+    class="pointer-events-none absolute -top-24 right-0 h-[32rem] w-[32rem] -translate-y-1/4 translate-x-1/4 rounded-full bg-accent-100/30 blur-3xl dark:bg-accent-900/20"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-32 left-0 h-[24rem] w-[24rem] -translate-x-1/4 translate-y-1/4 rounded-full bg-accent-50/40 blur-3xl dark:bg-accent-950/30"
+    aria-hidden="true"
+  ></div>
 
-    <p class="mb-2 text-lg text-slate-500 dark:text-slate-400">
-      {t.hero.greeting}
-    </p>
+  <!-- Content -->
+  <div class="relative z-10 mx-auto w-full max-w-6xl">
+    <div class="grid items-center gap-12 lg:grid-cols-5">
+      <!-- Left column — text -->
+      <div class="lg:col-span-3">
+        <!-- Greeting -->
+        <p class="animate-fade-in text-sm font-medium tracking-wider text-accent-600 uppercase dark:text-accent-400">
+          {t.hero.greeting}
+        </p>
 
-    <h1
-      class="text-balance text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl dark:text-slate-50"
-    >
-      {t.hero.name}
-    </h1>
-
-    <p
-      class="mt-4 text-lg font-medium text-accent-600 dark:text-accent-400 sm:text-xl"
-    >
-      {t.hero.subtitle}
-    </p>
-
-    <p
-      class="mx-auto mt-6 max-w-2xl text-balance text-slate-600 leading-relaxed dark:text-slate-400"
-    >
-      {t.hero.bio}
-    </p>
-
-    <!-- CTA buttons -->
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-      <a href={`${base}/cv`} class="btn-primary">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
+        <!-- Name -->
+        <h1
+          class="mt-3 animate-fade-in text-balance text-4xl font-extrabold tracking-tight text-slate-900 delay-100 sm:text-5xl lg:text-6xl dark:text-slate-50"
         >
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
-        {t.hero.cvButton}
-      </a>
-      <a href={`${base}/projects`} class="btn-secondary">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="18" height="18" x="3" y="3" rx="2" />
-          <path d="M9 3v18" />
-        </svg>
-        {t.hero.projectsButton}
-      </a>
-      <a href={`${base}/#contact`} class="btn-secondary">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="20" height="16" x="2" y="4" rx="2" />
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-        </svg>
-        {t.hero.contactButton}
-      </a>
-    </div>
+          {t.hero.name}
+        </h1>
 
-    <!-- Research tags -->
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
-      {tags.map((tag) => <span class="tag">{tag}</span>)}
+        <!-- Tagline -->
+        <p
+          class="mt-4 animate-fade-in text-balance text-lg font-medium text-slate-500 delay-200 sm:text-xl dark:text-slate-400"
+        >
+          {tagline}
+        </p>
+
+        <!-- Bio -->
+        <p
+          class="mt-5 max-w-xl animate-fade-in text-balance text-base leading-relaxed text-slate-600 delay-300 dark:text-slate-400"
+        >
+          {t.hero.bio}
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="mt-8 flex animate-fade-in flex-wrap gap-3 delay-400">
+          <a href={`${base}/cv`} class="btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            {t.hero.cvButton}
+          </a>
+          <a href={`${base}/projects`} class="btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg>
+            {t.hero.projectsButton}
+          </a>
+          <a href={`${base}/#contact`} class="btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            {t.hero.contactButton}
+          </a>
+        </div>
+
+        <!-- Research tags -->
+        <div class="mt-8 flex animate-fade-in flex-wrap gap-2 delay-500">
+          {researchTags.map((tag) => <span class="tag-accent">{tag}</span>)}
+        </div>
+      </div>
+
+      <!-- Right column — avatar + status cards -->
+      <div class="flex flex-col items-center gap-5 lg:col-span-2 lg:items-end">
+        <!-- Avatar / initials -->
+        <div class="flex h-28 w-28 animate-scale-in items-center justify-center rounded-2xl bg-gradient-to-br from-accent-500 to-accent-700 text-4xl font-bold text-white shadow-elevated ring-4 ring-accent-100/50 dark:ring-accent-900/50 sm:h-32 sm:w-32">
+          {t.hero.initials}
+        </div>
+
+        <!-- Status mini cards -->
+        <div class="grid w-full max-w-xs animate-fade-in gap-2 delay-300 sm:grid-cols-2">
+          {statusCards.map((card) => (
+            <div class="card-glass rounded-lg px-3 py-2.5">
+              <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                {card.label}
+              </p>
+              <p class="mt-0.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                {card.detail}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -7,61 +7,70 @@ interface Props {
   lang: Lang;
   pub: Publication;
   t: Translations;
+  index?: number;
 }
 
-const { lang, pub, t } = Astro.props;
+const { lang, pub, t, index = 0 } = Astro.props;
 const title = lang === 'zh' ? pub.title.zh : pub.title.en;
 const abstract = pub.abstract
-  ? lang === 'zh'
-    ? pub.abstract.zh
-    : pub.abstract.en
+  ? lang === 'zh' ? pub.abstract.zh : pub.abstract.en
   : '';
+
+const hasLinks = pub.links.paper || pub.links.code || pub.links.project;
 ---
 
-<div class="card">
-  <h3 class="text-base font-semibold text-slate-900 dark:text-slate-50">
-    {title}
-  </h3>
+<article
+  class:list={[
+    'card-accent group transition-all duration-300 hover:-translate-y-0.5',
+    index === 0 ? '' : '',
+  ]}
+>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div class="min-w-0 flex-1">
+      <h3 class="text-base font-semibold text-slate-900 dark:text-slate-50">
+        {title}
+      </h3>
 
-  <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-    {pub.authors}
-  </p>
+      <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-400">
+        {pub.authors}
+      </p>
 
-  <p class="mt-0.5 text-sm">
-    <span
-      class="inline-block rounded-full bg-accent-50 px-2 py-0.5 text-xs font-medium text-accent-700 dark:bg-accent-950 dark:text-accent-300"
-    >
-      {pub.venue}
-    </span>
-    <span class="ml-2 text-xs text-slate-400">{pub.year}</span>
-  </p>
+      <div class="mt-1 flex items-center gap-2">
+        <span class="badge-progress">{pub.venue}</span>
+        <span class="text-xs text-slate-400">{pub.year}</span>
+      </div>
+    </div>
+  </div>
 
   {abstract && (
-    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400 line-clamp-3">
+    <p class="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3">
       {abstract}
     </p>
   )}
 
+  <!-- Tags -->
   <div class="mt-3 flex flex-wrap gap-1.5">
     {pub.tags.map((tag) => <span class="tag">{tag}</span>)}
   </div>
 
   <!-- Links -->
-  <div class="mt-3 flex flex-wrap gap-3 text-sm">
-    {pub.links.paper && (
-      <a href={pub.links.paper} class="text-link" target="_blank" rel="noopener">
-        📄 {t.publications.paper}
-      </a>
-    )}
-    {pub.links.code && (
-      <a href={pub.links.code} class="text-link" target="_blank" rel="noopener">
-        💻 {t.publications.code}
-      </a>
-    )}
-    {pub.links.project && (
-      <a href={pub.links.project} class="text-link" target="_blank" rel="noopener">
-        🌐 {t.publications.project}
-      </a>
-    )}
-  </div>
-</div>
+  {hasLinks && (
+    <div class="mt-3 flex flex-wrap gap-3 border-t border-slate-100 pt-3 text-sm dark:border-slate-800">
+      {pub.links.paper && (
+        <a href={pub.links.paper} class="text-link" target="_blank" rel="noopener">
+          📄 {t.publications.paper}
+        </a>
+      )}
+      {pub.links.code && (
+        <a href={pub.links.code} class="text-link" target="_blank" rel="noopener">
+          💻 {t.publications.code}
+        </a>
+      )}
+      {pub.links.project && (
+        <a href={pub.links.project} class="text-link" target="_blank" rel="noopener">
+          🌐 {t.publications.project}
+        </a>
+      )}
+    </div>
+  )}
+</article>

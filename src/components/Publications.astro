@@ -1,7 +1,6 @@
 ---
 import { getTranslations, type Lang } from '../i18n';
 import publications from '../data/publications';
-import Section from './Section.astro';
 import PublicationItem from './PublicationItem.astro';
 
 interface Props {
@@ -12,20 +11,17 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 ---
 
-<Section id="publications" title={t.publications.heading}>
-  {
-    publications.length === 0 ? (
-      <p
-        class="text-center text-slate-500 italic dark:text-slate-400"
-      >
-        {t.publications.empty}
-      </p>
-    ) : (
-      <div class="mx-auto max-w-3xl space-y-4">
-        {publications.map((pub) => (
-          <PublicationItem lang={lang} pub={pub} t={t} />
-        ))}
-      </div>
-    )
-  }
-</Section>
+{
+  publications.length === 0 ? (
+    <div class="empty-state">
+      <span class="empty-state-icon">📝</span>
+      <p class="empty-state-text">{t.publications.empty}</p>
+    </div>
+  ) : (
+    <div class="mx-auto max-w-3xl space-y-4">
+      {publications.slice(0, 3).map((pub, i) => (
+        <PublicationItem lang={lang} pub={pub} t={t} index={i} />
+      ))}
+    </div>
+  )
+}

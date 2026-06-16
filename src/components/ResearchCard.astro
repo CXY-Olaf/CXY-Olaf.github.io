@@ -3,19 +3,41 @@ export interface Props {
   title: string;
   description: string;
   keywords: string[];
+  /** Optional emoji icon */
+  icon?: string;
+  index?: number;
 }
 
-const { title, description, keywords } = Astro.props;
+const { title, description, keywords, icon, index = 0 } = Astro.props;
+const delays = ['delay-100', 'delay-200', 'delay-300', 'delay-400'];
 ---
 
-<div class="card flex flex-col gap-3">
-  <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
-    {title}
-  </h3>
+<div
+  class:list={[
+    'card group flex flex-col gap-3 hover:-translate-y-1',
+    'animate-fade-in',
+    delays[index % delays.length] ?? '',
+  ]}
+>
+  <!-- Icon + Title -->
+  <div class="flex items-start gap-3">
+    {icon && (
+      <span class="mt-0.5 text-xl" aria-hidden="true">
+        {icon}
+      </span>
+    )}
+    <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-50">
+      {title}
+    </h3>
+  </div>
+
+  <!-- Description -->
   <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
     {description}
   </p>
+
+  <!-- Keywords -->
   <div class="mt-auto flex flex-wrap gap-1.5 pt-2">
-    {keywords.map((kw) => <span class="tag">{kw}</span>)}
+    {keywords.map((kw) => <span class="tag-accent">{kw}</span>)}
   </div>
 </div>

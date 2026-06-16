@@ -2,67 +2,30 @@
 export { getStaticPaths } from './_staticPaths';
 import { getTranslations, type Lang } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PublicationItem from '../../components/PublicationItem.astro';
 import publications from '../../data/publications';
 
 const { lang } = Astro.params as { lang: Lang };
 const t = getTranslations(lang);
 ---
 
-<BaseLayout
-  lang={lang}
-  title={t.meta.publicationsTitle}
-  description={t.meta.publicationsDescription}
->
+<BaseLayout lang={lang} title={t.meta.publicationsTitle} description={t.meta.publicationsDescription}>
   <section class="section">
     <h1 class="section-title">{t.publications.heading}</h1>
 
     {
       publications.length === 0 ? (
-        <p class="text-center text-slate-500 italic dark:text-slate-400">
-          {t.publications.empty}
-        </p>
+        <div class="empty-state">
+          <span class="empty-state-icon">📝</span>
+          <p class="empty-state-text">{t.publications.empty}</p>
+          <p class="mt-1 text-xs text-slate-400">
+            {lang === 'zh' ? '研究工作正在整理中，欢迎稍后查看' : 'Research work is being organized. Please check back later.'}
+          </p>
+        </div>
       ) : (
         <div class="mx-auto max-w-3xl space-y-4">
-          {publications.map((pub) => (
-            <div class="card">
-              <h3 class="text-base font-semibold text-slate-900 dark:text-slate-50">
-                {lang === 'zh' ? pub.title.zh : pub.title.en}
-              </h3>
-              <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
-                {pub.authors}
-              </p>
-              <p class="mt-0.5 text-sm">
-                <span class="inline-block rounded-full bg-accent-50 px-2 py-0.5 text-xs font-medium text-accent-700 dark:bg-accent-950 dark:text-accent-300">
-                  {pub.venue}
-                </span>
-                <span class="ml-2 text-xs text-slate-400">{pub.year}</span>
-              </p>
-              {pub.abstract && (
-                <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                  {lang === 'zh' ? pub.abstract.zh : pub.abstract.en}
-                </p>
-              )}
-              <div class="mt-3 flex flex-wrap gap-1.5">
-                {pub.tags.map((tag) => <span class="tag">{tag}</span>)}
-              </div>
-              <div class="mt-3 flex flex-wrap gap-3 text-sm">
-                {pub.links.paper && (
-                  <a href={pub.links.paper} class="text-link" target="_blank" rel="noopener">
-                    📄 {t.publications.paper}
-                  </a>
-                )}
-                {pub.links.code && (
-                  <a href={pub.links.code} class="text-link" target="_blank" rel="noopener">
-                    💻 {t.publications.code}
-                  </a>
-                )}
-                {pub.links.project && (
-                  <a href={pub.links.project} class="text-link" target="_blank" rel="noopener">
-                    🌐 {t.publications.project}
-                  </a>
-                )}
-              </div>
-            </div>
+          {publications.map((pub, i) => (
+            <PublicationItem lang={lang} pub={pub} t={t} index={i} />
           ))}
         </div>
       )

@@ -10,10 +10,24 @@ const { lang } = Astro.props;
 const t = getTranslations(lang);
 ---
 
-<Section id="about" title={t.about.heading}>
-  <div class="mx-auto max-w-3xl space-y-4 text-center text-slate-600 leading-relaxed dark:text-slate-400">
-    <p>{t.about.paragraph1}</p>
-    <p>{t.about.paragraph2}</p>
-    <p>{t.about.paragraph3}</p>
+<Section
+  id="about"
+  alt
+  title={t.about.heading}
+  subtitle={lang === 'zh'
+    ? '从理论探索到系统实现，关注生成式 AI 的核心问题'
+    : 'From theory to systems — focused on core problems in generative AI'
+  }
+>
+  <div class="mx-auto max-w-3xl space-y-5 text-center">
+    <p class="text-base leading-relaxed text-slate-600 dark:text-slate-400">
+      {t.about.paragraph1}
+    </p>
+    <p class="text-base leading-relaxed text-slate-600 dark:text-slate-400">
+      {t.about.paragraph2}
+    </p>
+    <p class="text-base leading-relaxed text-slate-600 dark:text-slate-400">
+      {t.about.paragraph3}
+    </p>
   </div>
 </Section>
