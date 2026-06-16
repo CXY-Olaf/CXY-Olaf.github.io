@@ -19,8 +19,8 @@ export interface Profile {
 
 const profile: Profile = {
   name: { en: 'Kailiang Cheng', zh: '程开良' },
-  email: 'TODO', // e.g. 'your-name@mail.ustc.edu.cn'
-  github: 'TODO', // e.g. 'https://github.com/CXY-Olaf'
+  email: 'chengelsanna@gmail.com', // e.g. 'your-name@mail.ustc.edu.cn'
+  github: 'https://github.com/CXY-Olaf', // e.g. 'https://github.com/CXY-Olaf'
   googleScholar: 'TODO', // e.g. 'https://scholar.google.com/citations?user=...'
   orcid: 'TODO', // e.g. 'https://orcid.org/0000-0000-0000-0000'
   linkedin: 'TODO', // e.g. 'https://www.linkedin.com/in/...'
