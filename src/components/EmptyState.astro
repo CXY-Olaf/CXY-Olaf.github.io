@@ -1,0 +1,14 @@
+---
+export interface Props {
+  icon?: string;
+  text: string;
+}
+
+const { icon = '📝', text } = Astro.props;
+---
+
+<div class="empty-state">
+  <span class="empty-state-icon">{icon}</span>
+  <p class="empty-state-text">{text}</p>
+  <slot />
+</div>

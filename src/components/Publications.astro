@@ -2,6 +2,7 @@
 import { getTranslations, type Lang } from '../i18n';
 import publications from '../data/publications';
 import PublicationItem from './PublicationItem.astro';
+import EmptyState from './EmptyState.astro';
 
 interface Props {
   lang: Lang;
@@ -13,10 +14,7 @@ const t = getTranslations(lang);
 
 {
   publications.length === 0 ? (
-    <div class="empty-state">
-      <span class="empty-state-icon">📝</span>
-      <p class="empty-state-text">{t.publications.empty}</p>
-    </div>
+    <EmptyState text={t.publications.empty} />
   ) : (
     <div class="mx-auto max-w-3xl space-y-4">
       {publications.slice(0, 3).map((pub, i) => (

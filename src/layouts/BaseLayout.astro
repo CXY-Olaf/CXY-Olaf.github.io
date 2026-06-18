@@ -57,10 +57,9 @@ const ogImg = ogImage ? new URL(ogImage, Astro.site).href : undefined;
       })();
     </script>
 
-    <!-- Inter font — loaded async via print-swap trick, never blocks rendering -->
+    <!-- Inter font — loaded via print-swap: non-blocking, swaps after load -->
     <link rel="preconnect" href="https://rsms.me/" />
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <noscript><link rel="stylesheet" href="https://rsms.me/inter/inter.css" /></noscript>
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" media="print" onload="this.media='all'" />
   </head>
 
   <body class="min-h-screen flex flex-col">

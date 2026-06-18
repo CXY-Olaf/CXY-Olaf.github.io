@@ -1,13 +1,14 @@
 ---
 import { getTranslations, type Lang } from '../i18n';
+import EmptyState from './EmptyState.astro';
 
-interface Props {
-  lang: Lang;
-}
+interface Props { lang: Lang; }
 
 const { lang } = Astro.props;
 const t = getTranslations(lang);
 const base = `/${lang}`;
+
+const headingCls = 'mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50';
 ---
 
 <div class="mx-auto max-w-3xl space-y-14">
@@ -22,9 +23,7 @@ const base = `/${lang}`;
 
   <!-- Education -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">📚</span> {t.cv.education}
-    </h3>
+    <h3 class={headingCls}><span aria-hidden="true">📚</span> {t.cv.education}</h3>
     <div class="space-y-3">
       {t.cv.educationItems.map((item) => (
         <div class="card">
@@ -39,9 +38,7 @@ const base = `/${lang}`;
 
   <!-- Research interests -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">🔬</span> {t.cv.researchInterests}
-    </h3>
+    <h3 class={headingCls}><span aria-hidden="true">🔬</span> {t.cv.researchInterests}</h3>
     <div class="card">
       <div class="flex flex-wrap gap-2">
         {t.research.directions.map((d) => <span class="tag-accent">{d.title}</span>)}
@@ -51,33 +48,23 @@ const base = `/${lang}`;
 
   <!-- Publications -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">📄</span> {t.cv.publications}
-    </h3>
-    <div class="empty-state">
-      <span class="empty-state-icon">📝</span>
-      <p class="empty-state-text">{t.publications.empty}</p>
+    <h3 class={headingCls}><span aria-hidden="true">📄</span> {t.cv.publications}</h3>
+    <EmptyState text={t.publications.empty}>
       <a href={`${base}/publications`} class="text-link mt-3 text-sm">{t.nav.publications} →</a>
-    </div>
+    </EmptyState>
   </section>
 
   <!-- Projects -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">🛠️</span> {t.cv.projects}
-    </h3>
-    <div class="empty-state">
-      <span class="empty-state-icon">🔧</span>
-      <p class="empty-state-text">TODO</p>
+    <h3 class={headingCls}><span aria-hidden="true">🛠️</span> {t.cv.projects}</h3>
+    <EmptyState icon="🔧" text="TODO">
       <a href={`${base}/projects`} class="text-link mt-3 text-sm">{t.nav.projects} →</a>
-    </div>
+    </EmptyState>
   </section>
 
   <!-- Skills -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">⚙️</span> {t.cv.skills}
-    </h3>
+    <h3 class={headingCls}><span aria-hidden="true">⚙️</span> {t.cv.skills}</h3>
     <div class="card">
       <p class="text-xs text-slate-400 dark:text-slate-500">
         TODO: Python, PyTorch, Diffusers, CUDA, Linux, Git, LaTeX …
@@ -87,31 +74,19 @@ const base = `/${lang}`;
 
   <!-- Experience -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">💼</span> {t.cv.experience}
-    </h3>
-    <div class="empty-state">
-      <span class="empty-state-icon">🏢</span>
-      <p class="empty-state-text">{t.cv.todo}</p>
-    </div>
+    <h3 class={headingCls}><span aria-hidden="true">💼</span> {t.cv.experience}</h3>
+    <EmptyState icon="🏢" text={t.cv.todo} />
   </section>
 
   <!-- Awards -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">🏆</span> {t.cv.awards}
-    </h3>
-    <div class="empty-state">
-      <span class="empty-state-icon">🥇</span>
-      <p class="empty-state-text">{t.cv.todo}</p>
-    </div>
+    <h3 class={headingCls}><span aria-hidden="true">🏆</span> {t.cv.awards}</h3>
+    <EmptyState icon="🥇" text={t.cv.todo} />
   </section>
 
   <!-- Contact -->
   <section>
-    <h3 class="mb-5 flex items-center gap-2 text-xl font-bold text-slate-900 dark:text-slate-50">
-      <span aria-hidden="true">📬</span> {t.cv.contact}
-    </h3>
+    <h3 class={headingCls}><span aria-hidden="true">📬</span> {t.cv.contact}</h3>
     <div class="card">
       <p class="text-sm text-slate-500 dark:text-slate-400">Email: TODO</p>
       <a href={`${base}/#contact`} class="text-link mt-2 inline-block text-sm">{t.nav.contact} →</a>

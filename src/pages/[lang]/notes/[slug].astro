@@ -1,6 +1,7 @@
 ---
 import { getTranslations, type Lang } from '../../../i18n';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EmptyState from '../../../components/EmptyState.astro';
 import posts from '../../../data/posts';
 
 interface Params {
@@ -60,19 +61,13 @@ const summary = lang === 'zh' ? post.summary.zh : post.summary.en;
 
     <!-- Article body placeholder -->
     <div class="prose-article mt-8">
-      <div class="empty-state py-10">
-        <span class="empty-state-icon">📝</span>
-        <p class="empty-state-text">
-          {lang === 'zh'
-            ? '完整文章内容待添加。请将 Markdown 文件放入 src/content/posts/ 目录。'
-            : 'Full article content coming soon. Place Markdown files in src/content/posts/.'}
-        </p>
+      <EmptyState
+        text={lang === 'zh' ? '完整文章内容待添加。请将 Markdown 文件放入 src/content/posts/ 目录。' : 'Full article content coming soon. Place Markdown files in src/content/posts/.'}
+      >
         <p class="mt-2 text-xs text-slate-400">
-          {lang === 'zh'
-            ? '参考 README 中"添加博客"章节了解如何添加文章。'
-            : 'See the "Adding Blog Posts" section in README for instructions.'}
+          {lang === 'zh' ? '参考 README 中"添加博客"章节了解如何添加文章。' : 'See the "Adding Blog Posts" section in README for instructions.'}
         </p>
-      </div>
+      </EmptyState>
     </div>
   </article>
 </BaseLayout>

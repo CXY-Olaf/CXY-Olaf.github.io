@@ -3,6 +3,7 @@ export { getStaticPaths } from './_staticPaths';
 import { getTranslations, type Lang } from '../../i18n';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import posts from '../../data/posts';
 
 const { lang } = Astro.params as { lang: Lang };
@@ -16,10 +17,7 @@ const visiblePosts = posts.filter((p) => p.published).sort((a, b) => b.date.loca
 
     {
       visiblePosts.length === 0 ? (
-        <div class="empty-state">
-          <span class="empty-state-icon">📖</span>
-          <p class="empty-state-text">{t.blog.empty}</p>
-        </div>
+        <EmptyState icon="📖" text={t.blog.empty} />
       ) : (
         <div class="mx-auto max-w-3xl space-y-5">
           {visiblePosts.map((post) => (

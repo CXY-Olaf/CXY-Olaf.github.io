@@ -7,11 +7,14 @@ import About from '../../components/About.astro';
 import Research from '../../components/Research.astro';
 import Publications from '../../components/Publications.astro';
 import Contact from '../../components/Contact.astro';
+import BlogCard from '../../components/BlogCard.astro';
 import Section from '../../components/Section.astro';
+import posts from '../../data/posts';
 
 const { lang } = Astro.params as { lang: Lang };
 const t = getTranslations(lang);
 const base = `/${lang}`;
+const previewPosts = posts.filter((p) => p.published).slice(0, 2);
 ---
 
 <BaseLayout lang={lang} title={t.meta.homeTitle} description={t.meta.homeDescription} heroBg>
@@ -50,29 +53,9 @@ const base = `/${lang}`;
     subtitle={lang === 'zh' ? '技术笔记与学习记录' : 'Technical notes and learning logs'}
   >
     <div class="mx-auto max-w-3xl space-y-4">
-      {
-        (await import('../../data/posts')).default
-          .filter((p) => p.published)
-          .slice(0, 2)
-          .map((post) => {
-            const title = lang === 'zh' ? post.title.zh : post.title.en;
-            const summary = lang === 'zh' ? post.summary.zh : post.summary.en;
-            return (
-              <article class="card group flex flex-col gap-3 hover:-translate-y-1">
-                <div>
-                  <a href={`${base}/notes/${post.slug}`} class="text-lg font-semibold text-slate-900 transition-colors group-hover:text-accent-600 dark:text-slate-50 dark:group-hover:text-accent-400">
-                    {title}
-                  </a>
-                  <p class="mt-0.5 text-xs text-slate-400">{post.date}</p>
-                </div>
-                <p class="text-sm leading-relaxed text-slate-600 dark:text-slate-400">{summary}</p>
-                <div class="flex flex-wrap gap-1.5">
-                  {post.tags.map((tag: string) => <span class="tag">{tag}</span>)}
-                </div>
-              </article>
-            );
-          })
-      }
+      {previewPosts.map((post) => (
+        <BlogCard lang={lang} post={post} t={t} />
+      ))}
     </div>
     <div class="mt-8 text-center">
       <a href={`${base}/notes`} class="btn-ghost">
